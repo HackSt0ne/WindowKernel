@@ -1,0 +1,7 @@
+﻿  Building 'BasicComm' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
+  Comm.c
+..\Comm\Comm.c(6): warning C4100: 'device': unreferenced formal parameter
+..\Comm\Comm.c(16): warning C4100: 'device': unreferenced formal parameter
+d:\workspace\驱动\代码\火哥课程\上\basiccomm\basiccomm\comm\comm.c(73): warning C4716: 'UnRegisterComm': must return a value
+d:\workspace\驱动\代码\火哥课程\上\basiccomm\basiccomm\comm\comm.c(65): warning C4715: 'RegisterComm': not all control paths return a value
+LINK : fatal error LNK1201: error writing to program database 'D:\WorkSpace\驱动\代码\火哥课程\上\BasicComm\BasicComm\Debug\BasicComm.pdb'; check for insufficient disk space, invalid path, or insufficient privilege
