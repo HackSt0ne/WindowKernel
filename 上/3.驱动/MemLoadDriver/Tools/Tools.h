@@ -1,6 +1,6 @@
 #pragma once
 #include <ntddk.h>
-
+#include <ntimage.h>
 typedef enum _SYSTEM_INFORMATION_CLASS
 {
 	SystemBasicInformation,        //  0
@@ -116,7 +116,7 @@ typedef struct _SYSTEM_MODULE_INFORMATION_ENTRY32 {
 
 typedef struct _SYSTEM_MODULE_INFORMATION
 {
-	ULONG Count;//内核中以加载的模块的个数
+	ULONG Count;
 #ifdef _AMD64_
 	SYSTEM_MODULE_INFORMATION_ENTRY64 Module[1];
 #else
@@ -131,7 +131,6 @@ NTSTATUS  ZwQuerySystemInformation(
 	IN ULONG SystemInformationLength,
 	OUT PULONG ReturnLength);
 
-//搜索内核模块，返回base size
 ULONG_PTR QueryModule(PUCHAR module_name, ULONG_PTR* module_size);
 
-//搜索模块导出函数，返回函数地址
+ULONG_PTR GetProcAddressByExport(PVOID module_base, PUCHAR func_name);
