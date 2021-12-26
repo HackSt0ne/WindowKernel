@@ -80,7 +80,7 @@ NTSTATUS FixRelocation(PVOID image_buff) {
 
 
 NTSTATUS FixIAT(PVOID image_buff) {
-	DbgBreakPoint();
+	//DbgBreakPoint();
 	NTSTATUS status = STATUS_UNSUCCESSFUL;
 	if (!image_buff || !IsPE(image_buff)) return status;
 
@@ -153,14 +153,18 @@ NTSTATUS MemLoadDriver(PVOID file_buff) {
 			break;
 	
 		//修复cookie
+		status = FixSecurityCookie(image_buff);
+		if (!NT_SUCCESS(status))
+			break;
+
+		//抹掉PE头
+		memset(image_buff, 0, 0x1000);
 
 		//call 入口点
 		status = CallEntryPointer(image_buff);
 		if (!NT_SUCCESS(status))
 			break;
 
-		//抹掉PE头
-		memset(image_buff, 0, 0x1000);
 	} while (0);
 
 	if (!NT_SUCCESS(status) && image_buff)//失败。释放内存
@@ -169,3 +173,16 @@ NTSTATUS MemLoadDriver(PVOID file_buff) {
 	return status;
 }
 
+NTSTATUS FixSecurityCookie(PVOID image_buff) {
+	NTSTATUS status = STATUS_UNSUCCESSFUL;
+	if (!image_buff || !IsPE(image_buff)) return status;
+	PIMAGE_DOS_HEADER pdos = (PIMAGE_DOS_HEADER)image_buff;
+	PIMAGE_NT_HEADERS pnt = (PUCHAR)image_buff + pdos->e_lfanew;
+
+	PIMAGE_DATA_DIRECTORY pconfig_dir = &pnt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_LOAD_CONFIG];
+	PIMAGE_LOAD_CONFIG_DIRECTORY pconfig = (PIMAGE_LOAD_CONFIG_DIRECTORY)((PUCHAR)image_buff + pconfig_dir->VirtualAddress);
+	if(pconfig->SecurityCookie)
+		*(PULONG)pconfig->SecurityCookie += 1;
+	status = STATUS_SUCCESS;
+	return status;
+}

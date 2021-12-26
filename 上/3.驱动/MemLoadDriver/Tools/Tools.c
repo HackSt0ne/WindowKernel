@@ -2,7 +2,7 @@
 
 //遍历内核模块(就是内核进程ntoskr的模块，也是驱动程序)
 ULONG_PTR QueryModule(PUCHAR module_name, ULONG_PTR* module_size) {
-	DbgBreakPoint();
+	//DbgBreakPoint();
 	if (!module_name || !module_size) return 0;
 
 	PUCHAR target_mod_name = ExAllocatePool(NonPagedPool, strlen(module_name)+1);
