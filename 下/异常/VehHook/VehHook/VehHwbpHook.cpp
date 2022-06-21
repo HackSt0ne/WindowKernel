@@ -103,11 +103,9 @@ bool SetEmptyDr(HANDLE hThread, ULONG uIndex, ULONG_PTR upAddress)
             }
 
             dwRet = SetThreadContext(hThread, &Context);
-            e = GetLastError();
             if (dwRet)
             {
                 dwRet = ResumeThread(hThread);
-                e = GetLastError();
                 if (dwRet)
                 {
                     return true;
@@ -198,6 +196,6 @@ bool SetHook(ULONG_PTR upHookAddr, VehHookCallback upTargetAddr, HANDLE hThread)
 
 bool UnSetHook(ULONG_PTR upHookAddr) 
 {
-    //todo 遍历数组清资源
+    //todo 
     return true;
 }
